@@ -1,4 +1,6 @@
 
+import java.util.*;
+
 public class Week05OOPLab {
 
 	// This Lab will give you a basic look at creating an Object Oriented Card Game.  
@@ -37,11 +39,10 @@ public class Week05OOPLab {
 		//
 		System.out.println("\nQuestion 1: Card Class");
 		// Add your code here to instantiate a Card
-		card firstCard = new Card("Ace", "Spades", 14);
+		Card firstCard = new Card("Ace", "Spades", 14);
 		
 		// Call the describe method on the newly instantiated card.
 		firstCard.describe();
-		
 		
 		
 
@@ -60,10 +61,10 @@ public class Week05OOPLab {
 		//
 		System.out.println("\nQuestion 2: Deck Class");
 	    // Add your code here to instantiate a Deck	
-	    
+	    Deck firstDeck = new Deck();
 	    
 	    // Call the describe method on the newly instantiated deck.
-	    
+	    firstDeck.describe();
 	    
 	    
 	    
@@ -73,10 +74,13 @@ public class Week05OOPLab {
 		//		Add a shuffle method within the Deck Class
 		System.out.println("\nQuestion 3: Deck shuffle() method");
 		// Test your method here
+		firstDeck.shuffle();
+		System.out.println("After shuffle:");
 		
 		
 		
 		// Call the describe method on the newly shuffled deck.
+		firstDeck.describe();
 
 		
 		
@@ -86,13 +90,10 @@ public class Week05OOPLab {
 		System.out.println("\nQuestion 4: Deck draw() method");
 		// Test your method here
 		
-		
-		
-		
-		
-		
-		
-		
+		Card drawCard = firstDeck.draw();
+		drawCard.describe();
+	
+			
 		// 5. Create Game Board:
 		//		Create and test a method that takes an int as a parameter (representing the
 		// 			number of players for a game) and returns a Map<String, List<Card>>
@@ -103,21 +104,53 @@ public class Week05OOPLab {
 		// 			and deal the cards out to the "players" in the Map.
 		System.out.println("\nQuestion 5: Create Game");
 		// Call your method here
+		int numOfPlayers = 3;
+		Map<String, List<Card>> board = new HashMap<>();
+		board = (startGame(numOfPlayers));
 
-		
-		
-		
-		
-		
-		
-		
-	} 
+		for(int i = 1; i <= numOfPlayers; i++){
+			String player = "Player " + i;
+			System.out.println(player);
+			for (Card card: board.get(player))
+				card.describe();
+			}
+
+		}
+		 
 	
 	// Method 5:
-	
-	
-	
-	
+	static public Map<String, List<Card>> startGame(int players){
+		Deck gameDeck = new Deck();
+		gameDeck.shuffle();
+		Map<String, List<Card>> hands = new HashMap<>();
+
+		if (players * 6 <= gameDeck.getCards().size()){ //check that there are enough cards
+			// Put named players and empty list in map
+			for (int p = 1; p <= players; p++){
+				String playerNum = "Player " + p;
+				List<Card> playerHand = new ArrayList<>();
+				hands.put(playerNum, playerHand);
+			}
+			//Deal 6 cards to each player
+			for (int i = 1; i <= 6; i++ ){  // loop for cards
+				for(int p = 1; p <= players; p ++){  // loop for players
+					String player = "Player " + p;
+					List<Card> hand = hands.get(player); // get players current hand
+					hand.add(gameDeck.draw()); // add card to hand
+					hands.put(player, hand); // puts players hand back in hands
+				}
+			}
+		}
+		else {
+			System.out.println("Too many players for 6 cards each!");
+		}
+
+		return hands;
+			
+
+	}
+		
 
 }
-}
+
+
